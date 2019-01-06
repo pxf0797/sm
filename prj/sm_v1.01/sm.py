@@ -45,13 +45,6 @@ class smTemplate:
     
     __sta_list = []
 
-    #def __init__(self,s):
-    #    """根据输入参数初始化参数
-
-    #    主要功能：1.生成文件名称"""
-    #    self.__fileName = s
-    #    self.__sourceName = s + ".c"
-    #    self.__headerName = s + '.h'
     def __init__(self,sys_args):
         """根据输入参数初始化参数
 
