@@ -4,16 +4,20 @@
 
 import sys
 import datetime
+import os
 
 class smTemplate:
     """文件生成脚本
-    使用方法：python sm.py stateMachineName stateList
-    脚本至少需要3个参数，状态机名称stateMachineName根据需要选取
+    使用方法：python sm.py path stateMachineName stateList
+    脚本至少需要4个参数，
+    路径path，当前路径可以使用/或\，其他路径一定要以非/或\开头，否则生成不了
+    状态机名称stateMachineName根据需要选取
     stateList是多个参数，目前配置状态机时至少需要给定1个状态"""
     __encoding = 'gb2312' #'utf-8' 'gb2312' ''
-    __fileName = ' '
-    __sourceName = ' '
-    __headerName = ' '
+    __fileName = ''
+    __sourceName = ''
+    __headerName = ''
+    __filePath = ''
     __timeFormatFull = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
     __timeFormatShort = datetime.datetime.now().strftime('%y%m%d')
     __fileComments = {'@copyright':':Copyright(C), 2019, pxf, person.',
@@ -49,16 +53,25 @@ class smTemplate:
         """根据输入参数初始化参数
 
         主要功能：1.生成文件名称"""
-        self.__fileName = sys_args[1]
-        self.__sourceName = sys_args[1] + ".c"
-        self.__headerName = sys_args[1] + '.h'
-        
-        self.__sta_list = sys_args[2:]
-        #print(self.__sta_list)
+        if sys_args[1] != '/' and sys_args[1] != '\\':
+            self.__filePath = sys_args[1]
+        else:
+            self.__filePath = ''
+        self.__fileName = sys_args[2]
+        self.__sourceName = sys_args[2] + ".c"
+        self.__headerName = sys_args[2] + '.h'
+        self.__sta_list = sys_args[3:]
 
     #========================================================
     # 文件基础生成函数
     #--------------------------------------------------------
+    def generateFilePath(self):
+        """生成文件存放路径"""
+        if self.__filePath != '':
+            if not os.path.exists(self.__filePath):
+                os.makedirs(self.__filePath)
+            os.chdir(self.__filePath)
+    
     def generateFileHeadComment(self,name):
         """生成文件头注释"""
         #set filename for every file generate
@@ -230,7 +243,6 @@ class smTemplate:
         cm += ("\n"*2)
         cm += self.generateSmStaActionDefine()
         cm += self.generateFileEndComment()
-        cm += ("\n"*1)
         fh.write(cm)
         fh.close()
 
@@ -257,6 +269,7 @@ class smTemplate:
 
     def createTemplate(self):
         """模板生成"""
+        self.generateFilePath()
         self.createSource()
         self.createHeader()
     #========================================================
