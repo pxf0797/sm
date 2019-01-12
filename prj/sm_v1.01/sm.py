@@ -52,7 +52,10 @@ class smTemplate:
     def __init__(self,sys_args):
         """根据输入参数初始化参数
 
-        主要功能：1.生成文件名称"""
+        主要功能：
+        1.生成文件名称
+        2.生成文件路径
+        3.生成状态列表"""
         if sys_args[1] != '/' and sys_args[1] != '\\':
             self.__filePath = sys_args[1]
         else:
@@ -275,8 +278,9 @@ class smTemplate:
     #========================================================
 
 if __name__ == '__main__':
-    if len(sys.argv) <= 2:
-        sys.stderr.write("please input no less than 3 parameter !!!")
+    if len(sys.argv) <= 3:
+        sys.stderr.write("please input no less than 4 parameter !!!")
     else:
         sm = smTemplate(sys.argv)
         sm.createTemplate()
+        
