@@ -5,6 +5,7 @@
 import sys
 import datetime
 import os
+sys.path.append(os.getcwd())
 import cTemplate
 
 class smTemplate:
